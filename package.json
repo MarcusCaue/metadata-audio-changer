@@ -1,0 +1,22 @@
+{
+  "name": "metadata-audio-changer",
+  "version": "1.0.0",
+  "description": "Sistema utilizado para alterar automaticamente os metadados de uma pasta de áudios",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx tsx ./src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-id3": "^0.2.9"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.4",
+    "typescript": "^5.9.2"
+  }
+}
