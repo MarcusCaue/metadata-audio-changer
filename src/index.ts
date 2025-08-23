@@ -1,15 +1,51 @@
-import NodeID3 from "node-id3";
-import { writeFileSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import NodeID3Adapter from "./services/adapter/NodeID3Adapter.ts";
 import type { AudioMetadata } from "./entities/AudioMetadata.ts";
 
+function toTitle(str: string) {
+  let peaces = str.split("-")
+  let newPeaces = peaces.map((peace) => {
+    let firstLetter = peace[0]
+    let rest = peace.substring(1)
+    return firstLetter?.toUpperCase() + rest
+  })
+  return newPeaces.join(" ")
+}
+
 const nodeId3Adapter = new NodeID3Adapter("./files");
 
-// nodeId3Adapter.extractImage("07-1-mandamento-supersticao-adivinhacao-e-idolatria");
+const imageAlbum = readFileSync("./files/images/dez-mandamentos-pe-paulo.jpg");
 
-// console.log("Antes...");
-// nodeId3Adapter.showAllTags("07-1-mandamento-supersticao-adivinhacao-e-idolatria");
+const files = [
+  "01-elementos-basicos-da-moral-catolica-os-dez-mandamentos-escritos-no-coracao-humano",
+  "02-elementos-basicos-da-moral-catolica-o-ser-humano-elevado-a-vida-sobrenatural",
+  "03-o-ser-humano-desordenado-apos-o-pecado"
+]
 
-// console.log("\n\n\nDepois...");
-// nodeId3Adapter.writeTags("07-1-mandamento-supersticao-adivinhacao-e-idolatria", newMetadata);
+for (let i = 0; i < files.length; i++) {
+  const file = files[i]
 
+  if (file != undefined) {
+    const newTags: AudioMetadata = {
+      title: toTitle(file),
+      artist: "Pe. Paulo Ricardo",
+      album: "Curso dos Dez Mandamentos",
+      genre: "Moral",
+      date: "2024", year: "2024",
+      language: "Português",
+      trackNumber: `${i+1}`,
+      image: {
+        mime: "image/jpeg",
+        type: {
+          id: i+1,
+          name: "front cover"
+        },
+        description: "Patriarca Moisés segurando as duas tábuas da Lei",
+        imageBuffer: imageAlbum
+      },
+    }
+    const result = nodeId3Adapter.writeTags(file, newTags)
+    console.log(`Resultado do arquivo ${i}: ${result}`);
+  }
+
+}
